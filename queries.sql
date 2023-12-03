@@ -51,13 +51,20 @@ group by (age_category)
 
 
 --customers by month
-SELECT to_char(sale_date, 'YYYY-MM') as date,
-count(customer_id) as total_customers,
+with tab as(
+select to_char(sale_date, 'YYYY-MM') as date,
+customer_id,
+count(customer_id) as total_buy,
 sum(quantity*price) as income
 FROM sales
 inner join products on sales.product_id = products.product_id
-group by to_char(sale_date, 'YYYY-MM')
-order by date
+group by to_char(sale_date, 'YYYY-MM'), customer_id
+order by date, customer_id
+)
+
+select date, count(customer_id) as total_customers, sum(income) as income
+from tab
+group by date
 
 
 --special offer
