@@ -11,14 +11,18 @@ order by (3) desc limit 10
 
 --lowest average income
 with tab as(
-select distinct concat(first_name, ' ', last_name) as name,
-avg(quantity*price) over (order by concat(first_name, ' ', last_name)) as personal_avg
+select avg(price*quantity) as avf
 from sales
-inner join products on sales.product_id = products.product_id
-inner join employees on sales.sales_person_id = employees.employee_id)
+left join products on sales.product_id = products.product_id)
 
-select name, round(personal_avg) as average_income
-from tab where (select avg(personal_avg) from tab)>personal_avg
+select 
+concat(first_name, ' ', last_name) as name,
+round(avg(quantity*price)) as average_income
+from sales
+left join products on sales.product_id = products.product_id
+left join employees on sales.sales_person_id = employees.employee_id
+group by(1)
+having avg(quantity*price)<(select avf from tab)
 order by (2)
 
 --day of the week income
