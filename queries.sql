@@ -26,7 +26,7 @@ with tab as(
 select
 concat(first_name, ' ', last_name) as name,
 EXTRACT(DOW from sale_date) as week_day_num,
-to_char(sale_date, 'DAY') as week_day_char,
+lower(to_char(sale_date, 'DAY')) as week_day_char,
 sum(quantity*price) as income
 from sales
 inner join products on sales.product_id = products.product_id
@@ -34,7 +34,7 @@ inner join employees on sales.sales_person_id = employees.employee_id
 group by(week_day_char,week_day_num,concat(first_name, ' ', last_name)))
 
 select
-name, week_day_char as weekday, round(income)
+name, week_day_char as weekday, round(income) as income
 from tab
 order by week_day_num, name
 
@@ -42,7 +42,7 @@ order by week_day_num, name
 --age groups
 select distinct
 case when age between 16 and 25 then '16-25'
-     when age between 26 and 45 then '26-40'
+     when age between 26 and 40 then '26-40'
      when age>40 then '40+' end as age_category,
      count(customer_id) as count
 from customers
