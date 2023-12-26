@@ -21,7 +21,6 @@ select name, round(personal_avg) as average_income
 from tab where (select avg(personal_avg) from tab)>personal_avg
 order by (2)
 
-
 --day of the week income
 with tab as(
 select
@@ -35,7 +34,7 @@ inner join employees on sales.sales_person_id = employees.employee_id
 group by(week_day_char,week_day_num,concat(first_name, ' ', last_name)))
 
 select
-name, week_day_char as weekday, income
+name, week_day_char as weekday, round(income)
 from tab
 order by week_day_num, name
 
