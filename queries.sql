@@ -37,7 +37,7 @@ group by(week_day_char,week_day_num,concat(first_name, ' ', last_name)))
 select
 name, week_day_char as weekday, income
 from tab
-order by week_day_num
+order by week_day_num, name
 
 
 --age groups
